@@ -1,46 +1,58 @@
 "use client";
 
+import Link from "next/link";
 import { useFormState, useFormStatus } from "react-dom";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import { type PackageFormState, createPackage } from "~/server/actions/packages";
-
+import {
+    type PackageFormState,
+    createPackage,
+} from "~/server/actions/packages";
 
 function Submit() {
-    const {pending} = useFormStatus();
+    const { pending } = useFormStatus();
 
-    return <Button
-        disabled={pending}
-        type="submit"
-    >
-        {pending ? "Saving..." : "Submit"}
-    </Button>
-  }
+    return (
+        <Button disabled={pending} type="submit">
+            {pending ? "Saving..." : "Submit"}
+        </Button>
+    );
+}
 
-function getMessage(formState: PackageFormState, field: string): string|undefined {
-    return formState.error?.fieldErrors?.[field]?.join(', ');
+function getMessage(
+    formState: PackageFormState,
+    field: string,
+): string | undefined {
+    return formState.error?.fieldErrors?.[field]?.join(", ");
 }
 
 export default function CreatePage() {
-  const [formState, action] = useFormState(createPackage, {
-    message: "",
-  });
+    const [formState, action] = useFormState(createPackage, {
+        message: "",
+    });
 
-  return (
-    <form action={action} className="grid gap-4">
-      <Input name="name" placeholder="Name" />
-      <Label htmlFor="name">{getMessage(formState, 'name')}</Label>
+    return (
+        <>
+            <Link href="/">
+                <Button>Back</Button>
+            </Link>
+            <form action={action} className="grid gap-4">
+                <Input name="name" placeholder="Name" />
+                <Label htmlFor="name">{getMessage(formState, "name")}</Label>
 
-      <Input name="provider" placeholder="Provider" />
-      <Label htmlFor="name">{getMessage(formState, 'provider')}</Label>
+                <Input name="provider" placeholder="Provider" />
+                <Label htmlFor="name">
+                    {getMessage(formState, "provider")}
+                </Label>
 
-      <Input name="url" placeholder="Url" />
-      <Label htmlFor="name">{getMessage(formState, 'url')}</Label>
+                <Input name="url" placeholder="Url" />
+                <Label htmlFor="name">{getMessage(formState, "url")}</Label>
 
-      <Submit />
+                <Submit />
 
-      <Label>{formState.message}</Label>
-    </form>
-  );
+                <Label>{formState.message}</Label>
+            </form>
+        </>
+    );
 }
