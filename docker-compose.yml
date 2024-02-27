@@ -1,0 +1,15 @@
+version: '3.9'
+
+services:
+  node:
+    build: .
+    command: tail -f /dev/null
+    environment:
+      HELM_RELEASE_NAME: local
+    volumes:
+      - ./:/app
+    labels:
+      traefik.enable: true
+      traefik.http.routers.tiqapp-nginx.priority: 1
+      traefik.http.routers.tiqapp-nginx.entrypoints: "web,websecure"
+      traefik.http.routers.tiqapp-nginx.tls: true
